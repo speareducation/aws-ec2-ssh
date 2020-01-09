@@ -106,13 +106,9 @@ if ! [[ -x "$(which git)" ]]; then
     exit 1
 fi
 
-tmpdir=$(mktemp -d)
-
 : ${INSTALL_DIR:/opt}
 
-mkdir -p ${INSTALL_DIR} && cd "${INSTALL_DIR}"
-
-cd "${INSTALL_DIR}/aws-ec2-ssh"
+cd "${INSTALL_DIR}"
 
 cp authorized_keys_command.sh $AUTHORIZED_KEYS_COMMAND_FILE
 cp import_users.sh $IMPORT_USERS_SCRIPT_FILE
