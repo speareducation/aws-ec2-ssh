@@ -95,54 +95,54 @@ export USERADD_PROGRAM
 export USERADD_ARGS
 
 # check if AWS CLI exists
-if ! [ -x "$(which aws)" ]; then
+if ! [[ -x "$(which aws)" ]]; then
     echo "aws executable not found - exiting!"
     exit 1
 fi
 
 # check if git exists
-if ! [ -x "$(which git)" ]; then
+if ! [[ -x "$(which git)" ]]; then
     echo "git executable not found - exiting!"
     exit 1
 fi
 
 tmpdir=$(mktemp -d)
 
-: ${INSTALL_DIR:-$tmpdir}
+: ${INSTALL_DIR:/opt}
 
-cd "$INSTALL_DIR"
+mkdir -p ${INSTALL_DIR} && cd "${INSTALL_DIR}"
 
 cd "${INSTALL_DIR}/aws-ec2-ssh"
 
 cp authorized_keys_command.sh $AUTHORIZED_KEYS_COMMAND_FILE
 cp import_users.sh $IMPORT_USERS_SCRIPT_FILE
 
-if [ "${IAM_GROUPS}" != "" ]
+if [[ "${IAM_GROUPS}" != "" ]]
 then
     echo "IAM_AUTHORIZED_GROUPS=\"${IAM_GROUPS}\"" >> $MAIN_CONFIG_FILE
 fi
 
-if [ "${SUDO_GROUPS}" != "" ]
+if [[ "${SUDO_GROUPS}" != "" ]]
 then
     echo "SUDOERS_GROUPS=\"${SUDO_GROUPS}\"" >> $MAIN_CONFIG_FILE
 fi
 
-if [ "${LOCAL_GROUPS}" != "" ]
+if [[ "${LOCAL_GROUPS}" != "" ]]
 then
     echo "LOCAL_GROUPS=\"${LOCAL_GROUPS}\"" >> $MAIN_CONFIG_FILE
 fi
 
-if [ "${ASSUME_ROLE}" != "" ]
+if [[ "${ASSUME_ROLE}" != "" ]]
 then
     echo "ASSUMEROLE=\"${ASSUME_ROLE}\"" >> $MAIN_CONFIG_FILE
 fi
 
-if [ "${USERADD_PROGRAM}" != "" ]
+if [[ "${USERADD_PROGRAM}" != "" ]]
 then
     echo "USERADD_PROGRAM=\"${USERADD_PROGRAM}\"" >> $MAIN_CONFIG_FILE
 fi
 
-if [ "${USERADD_ARGS}" != "" ]
+if [[ "${USERADD_ARGS}" != "" ]]
 then
     echo "USERADD_ARGS=\"${USERADD_ARGS}\"" >> $MAIN_CONFIG_FILE
 fi
