@@ -33,8 +33,8 @@ EOF
 }
 
 export SSHD_CONFIG_FILE="/etc/ssh/sshd_config"
-export AUTHORIZED_KEYS_COMMAND_FILE="/opt/authorized_keys_command.sh"
-export IMPORT_USERS_SCRIPT_FILE="/opt/import_users.sh"
+export AUTHORIZED_KEYS_COMMAND_FILE="/opt/aws-ec2-ssh/authorized_keys_command.sh"
+export IMPORT_USERS_SCRIPT_FILE="/opt/aws-ec2-ssh/import_users.sh"
 export MAIN_CONFIG_FILE="/etc/aws-ec2-ssh.conf"
 
 IAM_GROUPS=""
@@ -111,8 +111,7 @@ fi
 
 cd "${INSTALL_DIR}"
 
-cp authorized_keys_command.sh $AUTHORIZED_KEYS_COMMAND_FILE
-cp import_users.sh $IMPORT_USERS_SCRIPT_FILE
+APP_DIR="${INSTALL_DIR}/aws-ec2-ssh"
 
 if [[ "${IAM_GROUPS}" != "" ]]
 then
