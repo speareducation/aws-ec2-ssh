@@ -108,11 +108,11 @@ fi
 
 tmpdir=$(mktemp -d)
 
-cd "$tmpdir"
+: ${INSTALL_DIR:-$tmpdir"}
 
-git clone -b "$RELEASE" https://github.com/widdix/aws-ec2-ssh.git
+cd "$INSTALL_DIR"
 
-cd "$tmpdir/aws-ec2-ssh"
+cd "${INSTALL_DIR}/aws-ec2-ssh"
 
 cp authorized_keys_command.sh $AUTHORIZED_KEYS_COMMAND_FILE
 cp import_users.sh $IMPORT_USERS_SCRIPT_FILE
