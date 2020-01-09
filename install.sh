@@ -108,7 +108,7 @@ fi
 
 tmpdir=$(mktemp -d)
 
-: ${INSTALL_DIR:-$tmpdir"}
+: ${INSTALL_DIR:-$tmpdir}
 
 cd "$INSTALL_DIR"
 
