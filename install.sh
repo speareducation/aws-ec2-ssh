@@ -143,9 +143,9 @@ then
     echo "USERADD_ARGS=\"${USERADD_ARGS}\"" >> $MAIN_CONFIG_FILE
 fi
 
-./install_configure_selinux.sh
+${APP_DIR}/install_configure_selinux.sh
 
-./install_configure_sshd.sh
+${APP_DIR}/install_configure_sshd.sh
 
 cat > /etc/cron.d/import_users << EOF
 SHELL=/bin/bash
@@ -157,5 +157,3 @@ EOF
 chmod 0644 /etc/cron.d/import_users
 
 $IMPORT_USERS_SCRIPT_FILE
-
-./install_restart_sshd.sh
