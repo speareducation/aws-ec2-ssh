@@ -1,4 +1,5 @@
 #!/bin/bash -e
+set -x
 
 show_help() {
 cat << EOF
