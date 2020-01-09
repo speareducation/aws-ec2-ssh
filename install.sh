@@ -107,11 +107,7 @@ if ! [[ -x "$(which git)" ]]; then
     exit 1
 fi
 
-: ${INSTALL_DIR:/opt}
-
-cd "${INSTALL_DIR}"
-
-APP_DIR="${INSTALL_DIR}/aws-ec2-ssh"
+APP_DIR="/opt/aws-ec2-ssh"
 
 if [[ "${IAM_GROUPS}" != "" ]]
 then
