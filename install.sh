@@ -43,9 +43,11 @@ LOCAL_GROUPS=""
 ASSUME_ROLE=""
 USERADD_PROGRAM=""
 USERADD_ARGS=""
+USERDEL_PROGRAM=""
+USERDEL_ARGS=""
 RELEASE="master"
 
-while getopts :hva:i:l:s:p:u:r: opt
+while getopts :hva:i:l:s:p:u:d:f:r: opt
 do
     case $opt in
         h)
@@ -73,6 +75,12 @@ do
         u)
             USERADD_ARGS="$OPTARG"
             ;;
+        d)
+            USERDEL_PROGRAM="$OPTARG"
+            ;;
+        f)
+            USERDEL_ARGS="$OPTARG"
+            ;;
         r)
             RELEASE="$OPTARG"
             ;;
@@ -94,6 +102,8 @@ export LOCAL_GROUPS
 export ASSUME_ROLE
 export USERADD_PROGRAM
 export USERADD_ARGS
+export USERDEL_PROGRAM
+export USERDEL_ARGS
 
 # check if AWS CLI exists
 if ! [[ -x "$(which aws)" ]]; then
@@ -137,6 +147,16 @@ fi
 if [[ "${USERADD_ARGS}" != "" ]]
 then
     echo "USERADD_ARGS=\"${USERADD_ARGS}\"" >> $MAIN_CONFIG_FILE
+fi
+
+if [ "${USERDEL_PROGRAM}" != "" ]
+then
+    echo "USERDEL_PROGRAM=\"${USERDEL_PROGRAM}\"" >> $MAIN_CONFIG_FILE
+fi
+
+if [ "${USERDEL_ARGS}" != "" ]
+then
+    echo "USERDEL_ARGS=\"${USERDEL_ARGS}\"" >> $MAIN_CONFIG_FILE
 fi
 
 ${APP_DIR}/install_configure_selinux.sh

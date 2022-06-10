@@ -1,12 +1,12 @@
 # Manage AWS EC2 SSH access with IAM
 
-> June 2019: Check out [Amazon EC2 Instance Connect](https://aws.amazon.com/blogs/compute/new-using-amazon-ec2-instance-connect-for-ssh-access-to-your-ec2-instances/) as a replacement for this project
-
-> September 2018: Check out [AWS Systems Manager Session Manager ](https://aws.amazon.com/de/blogs/aws/new-session-manager/) as a replacement for this project
+> This project is no longer maintained. AWS offers two alternatives to solve similar needs:
+> * [Amazon EC2 Instance Connect](https://aws.amazon.com/blogs/compute/new-using-amazon-ec2-instance-connect-for-ssh-access-to-your-ec2-instances/)
+> * [AWS Systems Manager Session Manager ](https://aws.amazon.com/de/blogs/aws/new-session-manager/)
 
 Use your IAM user's public SSH key to get access via SSH to an **EC2 instance** running
-* Amazon Linux 2017.09
-* Amazon Linux 2 2017.12
+* Amazon Linux 2018.03
+* Amazon Linux 2
 * Ubuntu 16.04
 * SUSE Linux Enterprise Server 12 SP3
 * RHEL 7.4
@@ -114,6 +114,8 @@ LOCAL_MARKER_GROUP="iam-synced-users"          # Dedicated UNIX group to mark im
 LOCAL_GROUPS="GROUPNAMES"                      # Comma seperated list of UNIX groups to add the users in
 USERADD_PROGRAM="/usr/sbin/useradd"            # The useradd program to use. defaults to `/usr/sbin/useradd`
 USERADD_ARGS="--create-home --shell /bin/bash" # Arguments for the useradd program. defaults to `--create-home --shell /bin/bash`
+USERDEL_PROGRAM="/usr/sbin/userdel"            # The userdel program to use. defaults to `/usr/sbin/userdel`
+USERDEL_ARGS="--force --remove"                # Arguments for the userdel program. defaults to `--force --remove`
 ```
 
 The LOCAL_MARKER_GROUP will be created if it does not exist. BEWARE: DO NOT add any manually created users

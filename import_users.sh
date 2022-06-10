@@ -54,9 +54,16 @@ fi
 # Possibility to provide custom useradd arguments
 : ${USERADD_ARGS:="--user-group --create-home --shell /bin/bash"}
 
+# Possibility to provide a custom userdel program
+: ${USERDEL_PROGRAM:="/usr/sbin/userdel"}
+
+# Possibility to provide custom userdel arguments
+: ${USERDEL_ARGS:="--force --remove"}
+
 # Initizalize INSTANCE variable
-INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
+METADATA_TOKEN=$(curl -s -X PUT -H 'x-aws-ec2-metadata-token-ttl-seconds: 60' http://169.254.169.254/latest/api/token)
+INSTANCE_ID=$(curl -s -H "x-aws-ec2-metadata-token: ${METADATA_TOKEN}" http://169.254.169.254/latest/meta-data/instance-id)
+REGION=$(curl -s -H "x-aws-ec2-metadata-token: ${METADATA_TOKEN}" http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
 
 function setup_aws_credentials() {
     local stscredentials
@@ -211,7 +218,8 @@ function delete_local_user() {
     /usr/bin/pkill -9 -u "${1}" || true
     sleep 1
     # Remove account now that all processes for the user are gone
-    /usr/sbin/userdel -f -r "${1}"
+    ${USERDEL_PROGRAM} ${USERDEL_ARGS} "${1}"
+
     log "Deleted user ${1}"
 }
 
