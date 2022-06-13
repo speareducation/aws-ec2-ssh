@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 function log() {
-    /usr/bin/logger -i -p auth.info -t aws-ec2-ssh "$@"
+    /usr/bin/logger -p auth.info -t aws-ec2-ssh "$@"
 }
 
 # check if AWS CLI exists
@@ -61,9 +61,9 @@ fi
 : ${USERDEL_ARGS:="--force --remove"}
 
 # Initizalize INSTANCE variable
-METADATA_TOKEN=$(curl -s -X PUT -H 'x-aws-ec2-metadata-token-ttl-seconds: 60' http://169.254.169.254/latest/api/token)
-INSTANCE_ID=$(curl -s -H "x-aws-ec2-metadata-token: ${METADATA_TOKEN}" http://169.254.169.254/latest/meta-data/instance-id)
-REGION=$(curl -s -H "x-aws-ec2-metadata-token: ${METADATA_TOKEN}" http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
+#METADATA_TOKEN=$(curl -s -X PUT -H 'x-aws-ec2-metadata-token-ttl-seconds: 60' http://169.254.169.254/latest/api/token)
+#INSTANCE_ID=$(curl -s -H "x-aws-ec2-metadata-token: ${METADATA_TOKEN}" http://169.254.169.254/latest/meta-data/instance-id)
+#REGION=$(curl -s -H "x-aws-ec2-metadata-token: ${METADATA_TOKEN}" http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
 
 function setup_aws_credentials() {
     local stscredentials
@@ -274,7 +274,7 @@ function sync_accounts() {
 
     local_users=$(get_local_users | sort | uniq)
 
-    intersection=$(echo ${local_users} ${iam_users} | tr " " "\n" | sort | uniq -D | uniq)
+    intersection=$(echo ${local_users} ${iam_users} | tr " " "\n" | sort | uniq -d | uniq)
     removed_users=$(echo ${local_users} ${intersection} | tr " " "\n" | sort | uniq -u)
 
     # Add or update the users found in IAM
