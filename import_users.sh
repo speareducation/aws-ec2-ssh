@@ -189,6 +189,9 @@ function create_or_update_local_user() {
 
     if ! id "${username}" >/dev/null 2>&1; then
         ${USERADD_PROGRAM} ${USERADD_ARGS} "${username}"
+        # Create a dummy password for user to prevent locked account issue on alpine
+        /usr/sbin/usermod -p "$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64 | rev | cut -b 2- | rev)" ${username}
+        /usr/sibn/usermod -U ${username}
         /bin/chown -R "${username}:${username}" "$(eval echo ~$username)"
         log "Created new user ${username}"
     fi
