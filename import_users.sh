@@ -192,7 +192,7 @@ function create_or_update_local_user() {
         # Create a dummy password for user to prevent locked account issue on alpine
         /usr/sbin/usermod -p "$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64 | rev | cut -b 2- | rev)" ${username}
         /usr/sbin/usermod -U ${username}
-        /bin/chown -R "${username}:${username}" "$(eval echo ~$username)"
+        /bin/chown -R "${username}" "$(eval echo ~$username)"
         log "Created new user ${username}"
     fi
     /usr/sbin/usermod -a -G "${localusergroups}" "${username}"
@@ -228,10 +228,11 @@ function delete_local_user() {
 
 function clean_iam_username() {
     local clean_username="${1}"
-    clean_username=${clean_username//"+"/".plus."}
-    clean_username=${clean_username//"="/".equal."}
-    clean_username=${clean_username//","/".comma."}
-    clean_username=${clean_username//"@"/".at."}
+    clean_username=${clean_username//"+"/"_plus_"}
+    clean_username=${clean_username//"="/"_equal_"}
+    clean_username=${clean_username//","/"_comma_"}
+    clean_username=${clean_username//"@"/"_at_"}
+    clean_username=${clean_username//"."/"_"}
     clean_username=${clean_username,,}
     echo "${clean_username}"
 }
