@@ -39,6 +39,21 @@ UnsaveUserName=${UnsaveUserName//".equal."/"="}
 UnsaveUserName=${UnsaveUserName//".comma."/","}
 UnsaveUserName=${UnsaveUserName//".at."/"@"}
 
+# if cache keys is enabled, try to fetch the key locally first
+USER_KEY_DIR="/opt/aws-ec2-ssh/cached-keys"
+mkdir -p ${USER_KEY_DIR}
+USER_KEYFILE="${USER_KEY_DIR}/key-${UnsaveUserName}"
+if [[ -n ${CACHE_KEYS} ]] && [[ "1" == "${CACHE_KEYS}" ]]; then
+  if [[ -f ${USER_KEYFILE} ]]; then
+    cat "${USER_KEYFILE}"
+    exit
+  fi
+fi
 aws iam list-ssh-public-keys --user-name "$UnsaveUserName" --query "SSHPublicKeys[?Status == 'Active'].[SSHPublicKeyId]" --output text | while read -r KeyId; do
-  aws iam get-ssh-public-key --user-name "$UnsaveUserName" --ssh-public-key-id "$KeyId" --encoding SSH --query "SSHPublicKey.SSHPublicKeyBody" --output text
+  KEY_OUTPUT=$(aws iam get-ssh-public-key --user-name "$UnsaveUserName" --ssh-public-key-id "$KeyId" --encoding SSH --query "SSHPublicKey.SSHPublicKeyBody" --output text)
+  KEY_RESULT=$?
+  if [[ -n ${CACHE_KEYS} ]] && [[ "1" == "${CACHE_KEYS}" ]] && [[ "0" == "${KEY_RESULT}" ]]; then
+    echo "${KEY_OUTPUT}" >> "${USER_KEYFILE}"
+  fi
+  echo "${KEY_OUTPUT}"
 done
