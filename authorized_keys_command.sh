@@ -34,10 +34,11 @@ then
 fi
 
 UnsaveUserName="$1"
-UnsaveUserName=${UnsaveUserName//".plus."/"+"}
-UnsaveUserName=${UnsaveUserName//".equal."/"="}
-UnsaveUserName=${UnsaveUserName//".comma."/","}
-UnsaveUserName=${UnsaveUserName//".at."/"@"}
+UnsaveUserName=${UnsaveUserName//"_plus_"/"+"}
+UnsaveUserName=${UnsaveUserName//"_equal_"/"="}
+UnsaveUserName=${UnsaveUserName//"_comma_"/","}
+UnsaveUserName=${UnsaveUserName//"_at_"/"@"}
+
 
 # if cache keys is enabled, try to fetch the key locally first
 USER_KEY_DIR="/opt/aws-ec2-ssh/cached-keys"
